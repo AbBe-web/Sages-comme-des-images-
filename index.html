@@ -99,14 +99,14 @@
     <script>
         const questions = [
             "Amaury/Lucas a-t-il contribué sans faillir cette semaine à l’équilibre idyllique de sa famille ?",
-            "A-t-il spontanément et régulièrement proposé son aide dans la vie quotidienne : mettre la table, ranger sa chambre, étendre le linge, apporter le petit déjeuner au lit à ses parents, aller chercher les 🥐, …?",
+            "A-t-il spontanément et régulièrement proposé son aide dans la vie quotidienne ?",
             "A-t-il toujours fait ses devoirs sans rechigner ?",
             "A-t-il fait le maximum de ce qu’il pouvait faire pour avoir de bonnes notes à l’école ?",
-            "A-t-il été indulgent envers ses parents  (même si c’est exceptionnellement nécessaire) parce qu’être un parent parfait c’est impossible ?",
+            "A-t-il été indulgent envers ses parents ?",
             "A-t-il été aussi adorable avec sa sœur/ses frères qu’elle/ils mérite/nt ?",
-            "A-t-il eu une hygiène corporelle et dentaire irréprochable sans qu’il soit nécessaire de le menacer de privation de gâteau basque pendant 7 ans (… de malheur 😢) ?",
-            "A-t-il été bien actif c’est à dire au moins 1h par jour avec parfois des activités intenses ?",
-            "A-t-il fait régulièrement preuve de courage comme il en a coutume ?"
+            "A-t-il eu une hygiène corporelle et dentaire irréprochable sans menace ?",
+            "A-t-il été bien actif au moins 1h par jour ?",
+            "A-t-il fait régulièrement preuve de courage ?"
         ];
 
         let answers = [];
@@ -140,13 +140,25 @@
         }
 
         function recordAnswer(answer, button) {
-            answers.push({ question: questions[currentQuestion], response: answer ? "Oui" : "Non" });
+            answers.push(answer);
             currentQuestion++;
             button.parentElement.querySelectorAll("button").forEach(btn => btn.disabled = true);
             showQuestion();
         }
 
         function showResult() {
+            let resultText = document.getElementById("result-text");
+            let allYes = answers.every(a => a);
+            let allNo = answers.every(a => !a);
+
+            if (allYes) {
+                resultText.innerHTML = "Encore une semaine parfaite ! Cela mérite un hôtel 5 étoiles ou tout autre cadeau 🎁 de son choix 😇🥰🥳🥰😇.";
+            } else if (allNo) {
+                resultText.innerHTML = "Incompréhensible… Il doit bien y avoir une explication. Il mérite du réconfort : un animal de compagnie ou une boîte de cannelés La Toque Cuivrée ! 😢";
+            } else {
+                resultText.innerHTML = "Lucas/Amaury a été proche de la perfection ! Il mérite un petit geste : un ensemble de vêtements, une console ou un week-end avec ses amis/famille 😇👏.";
+            }
+
             document.getElementById("result").classList.remove("hidden");
             document.getElementById("final-action").classList.remove("hidden");
         }
@@ -163,8 +175,8 @@
 
         function printPage() {
             let printableContent = "<h1>Résumé du questionnaire</h1>";
-            answers.forEach(a => {
-                printableContent += `<p><strong>${a.question}</strong> <br>Réponse: ${a.response}</p>`;
+            questions.forEach((q, i) => {
+                printableContent += `<p><strong>${q}</strong> <br>Réponse: ${answers[i] ? "Oui" : "Non"}</p>`;
             });
 
             let newWin = window.open("", "_blank");
