@@ -14,7 +14,7 @@
         }
 
         #container {
-            max-width: 600px;
+            max-width: 95%;
             margin: auto;
             background: white;
             padding: 20px;
@@ -26,6 +26,12 @@
             display: none;
         }
 
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
         button {
             margin: 10px;
             padding: 10px 20px;
@@ -35,10 +41,18 @@
             background-color: #28a745;
             color: white;
             border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
         }
 
         button:hover {
             background-color: #218838;
+        }
+
+        @media print {
+            button {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -101,6 +115,7 @@
         function startQuestions() {
             document.getElementById("start").classList.add("hidden");
             document.getElementById("not-ready").classList.add("hidden");
+            document.getElementById("questionnaire").classList.remove("hidden");
             showQuestion();
         }
 
@@ -112,49 +127,60 @@
         function showQuestion() {
             if (currentQuestion < questions.length) {
                 let questionnaire = document.getElementById("questionnaire");
-                questionnaire.innerHTML = `<p>${questions[currentQuestion]}</p>
-                                           <button onclick="recordAnswer(true)">Oui</button>
-                                           <button onclick="recordAnswer(false)">Non</button>`;
-                questionnaire.classList.remove("hidden");
+                let questionElement = document.createElement("div");
+                questionElement.classList.add("question");
+                questionElement.innerHTML = `<p>${questions[currentQuestion]}</p>
+                                             <button onclick="recordAnswer(true, this)">Oui</button>
+                                             <button onclick="recordAnswer(false, this)">Non</button>`;
+                questionnaire.appendChild(questionElement);
+
+                // Scroll vers la nouvelle question
+                questionElement.scrollIntoView({ behavior: "smooth", block: "center" });
             } else {
                 showResult();
             }
         }
 
-        function recordAnswer(answer) {
-            answers.push(answer);
+        function recordAnswer(answer, button) {
+            answers.push({ question: questions[currentQuestion], response: answer ? "Oui" : "Non" });
             currentQuestion++;
+            button.parentElement.querySelectorAll("button").forEach(btn => btn.disabled = true);
             showQuestion();
         }
 
         function showResult() {
             let resultText = document.getElementById("result-text");
-            if (answers.every(a => a)) {
+            if (answers.every(a => a.response === "Oui")) {
                 resultText.innerHTML = "Encore une semaine où Amaury/Lucas a eu un comportement parfait... Il mérite un hôtel 5 étoiles ! 🎁🥳";
-            } else if (answers.some(a => a)) {
+            } else if (answers.some(a => a.response === "Oui")) {
                 resultText.innerHTML = "Franchement, Lucas/Amaury a été proche de la perfection encore une fois cette semaine 😇 Il mérite un cadeau spécial ! 🎉";
             } else {
                 resultText.innerHTML = "Franchement, c’est incompréhensible… Il faut le réconforter avec une boîte de cannelés ! 😢";
             }
 
-            document.getElementById("questionnaire").classList.add("hidden");
             document.getElementById("result").classList.remove("hidden");
+            document.getElementById("final-action").classList.remove("hidden");
         }
 
         function agree() {
             document.getElementById("result").classList.add("hidden");
             document.getElementById("agree-message").classList.remove("hidden");
-            document.getElementById("final-action").classList.remove("hidden");
         }
 
         function disagree() {
             document.getElementById("result").classList.add("hidden");
             document.getElementById("disagree-message").classList.remove("hidden");
-            document.getElementById("final-action").classList.remove("hidden");
         }
 
         function printPage() {
-            window.print();
+            let printableContent = "<h1>Résumé du questionnaire</h1>";
+            answers.forEach(a => {
+                printableContent += `<p><strong>${a.question}</strong> <br>Réponse: ${a.response}</p>`;
+            });
+            let newWin = window.open("");
+            newWin.document.write(printableContent);
+            newWin.document.close();
+            newWin.print();
         }
     </script>
 
