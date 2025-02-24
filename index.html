@@ -133,7 +133,6 @@
                                              <button onclick="recordAnswer(true, this)">Oui</button>
                                              <button onclick="recordAnswer(false, this)">Non</button>`;
                 questionnaire.appendChild(questionElement);
-
                 questionElement.scrollIntoView({ behavior: "smooth", block: "center" });
             } else {
                 showResult();
@@ -168,7 +167,7 @@
                 printableContent += `<p><strong>${a.question}</strong> <br>Réponse: ${a.response}</p>`;
             });
 
-            let newWin = window.open("", "", "width=800,height=600");
+            let newWin = window.open("", "_blank");
             newWin.document.write("<html><head><title>Résumé</title></head><body>");
             newWin.document.write(printableContent);
             newWin.document.write("</body></html>");
@@ -176,7 +175,7 @@
             setTimeout(() => {
                 newWin.print();
                 newWin.close();
-            }, 500);
+            }, 1000);
         }
     </script>
 
