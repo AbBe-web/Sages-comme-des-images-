@@ -76,8 +76,11 @@
 
         <div id="questionnaire" class="hidden"></div>
 
+        <div id="final-message" class="hidden">
+            <p id="final-text"></p>
+        </div>
+
         <div id="result" class="hidden">
-            <p id="result-text"></p>
             <p>Êtes-vous d’accord avec cette proposition ?</p>
             <button onclick="agree()">Oui</button>
             <button onclick="disagree()">Non</button>
@@ -135,7 +138,7 @@
                 questionnaire.appendChild(questionElement);
                 questionElement.scrollIntoView({ behavior: "smooth", block: "center" });
             } else {
-                showResult();
+                showFinalMessage();
             }
         }
 
@@ -146,19 +149,20 @@
             showQuestion();
         }
 
-        function showResult() {
-            let resultText = document.getElementById("result-text");
+        function showFinalMessage() {
+            let finalText = document.getElementById("final-text");
             let allYes = answers.every(a => a);
             let allNo = answers.every(a => !a);
 
             if (allYes) {
-                resultText.innerHTML = "Encore une semaine parfaite ! Cela mérite une semaine tout frais payés dans un hôtel 5 étoiles avec 3 à 10 personnes de son choix ou tout autre cadeau 🎁 de son choix 😇🥰🥳🥰😇.";
+                finalText.innerHTML = "Encore une semaine où Amaury/Lucas a eu un comportement parfait : charmant, bienveillant, serviable… Il mérite une semaine tout frais payés dans un hôtel 5 étoiles ou tout autre cadeau 🎁 de son choix 😇🥰🥳🥰😇.";
             } else if (allNo) {
-                resultText.innerHTML = "C'est incompréhensible... C’est la première fois depuis qu’il est né ! Il mérite du réconfort : un animal de compagnie, une soirée cinéma ou une boîte de cannelés La Toque Cuivrée ! 😢";
+                finalText.innerHTML = "Franchement, c’est incompréhensible … Il a probablement subi un traumatisme totalement indépendant de sa volonté. Il mérite un réconfort : un animal de compagnie ou une boîte de cannelés La Toque Cuivrée 😢.";
             } else {
-                resultText.innerHTML = "Lucas/Amaury a été proche de la perfection ! Il mérite un ensemble de vêtements, une console ou un week-end avec ses amis/famille 😇👏.";
+                finalText.innerHTML = "Lucas/Amaury a été proche de la perfection cette semaine 😇 Il mérite des encouragements chaleureux et un petit geste : un ensemble de vêtements, une console ou un week-end avec ses amis/famille 🙏👏😇.";
             }
 
+            document.getElementById("final-message").classList.remove("hidden");
             document.getElementById("result").classList.remove("hidden");
             document.getElementById("final-action").classList.remove("hidden");
         }
@@ -168,12 +172,10 @@
             questions.forEach((q, i) => {
                 printableContent += `<p><strong>${q}</strong> <br>Réponse: ${answers[i] ? "Oui" : "Non"}</p>`;
             });
-            printableContent += `<h2>${document.getElementById("result-text").innerHTML}</h2>`;
+            printableContent += `<h2>${document.getElementById("final-text").innerHTML}</h2>`;
 
             let newWin = window.open("", "_blank");
-            newWin.document.write("<html><head><title>Résumé</title></head><body>");
             newWin.document.write(printableContent);
-            newWin.document.write("</body></html>");
             newWin.document.close();
             setTimeout(() => {
                 newWin.print();
