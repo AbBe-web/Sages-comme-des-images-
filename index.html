@@ -86,12 +86,8 @@
             <button onclick="disagree()">Non</button>
         </div>
 
-        <div id="disagree-message" class="hidden">
-            <p>Je vous propose de contacter le parrain de la famille, Pierre, qui trouvera sûrement les fonds nécessaires (en sollicitant la solidarité familiale) pour vous payer une psychothérapie car être aussi peu positif est sûrement le signe que vous êtes en difficulté et cela nous cause une grande peine 🥰.</p>
-        </div>
-
-        <div id="agree-message" class="hidden">
-            <p>Vous êtes un très honorable membre de la Famille. Votre présence est une joie pour chacun 🥳😊🥰🥳</p>
+        <div id="final-response" class="hidden">
+            <p id="response-text"></p>
         </div>
 
         <div id="final-action" class="hidden">
@@ -164,23 +160,25 @@
 
             document.getElementById("final-message").classList.remove("hidden");
             document.getElementById("result").classList.remove("hidden");
+        }
+
+        function agree() {
+            document.getElementById("response-text").innerHTML = "Vous êtes un très honorable membre de la Famille. Votre lucidité bienveillante est remarquable. Votre présence est une joie pour chacun 🥳😊🥰🥳.";
+            showFinalResponse();
+        }
+
+        function disagree() {
+            document.getElementById("response-text").innerHTML = "Je vous propose de contacter le parrain de la famille, Pierre, qui trouvera sûrement les fonds nécessaires (en sollicitant la solidarité familiale) pour vous payer une psychothérapie car être aussi peu positif est sûrement le signe que vous êtes en difficulté et cela nous cause une grande peine 🥰.";
+            showFinalResponse();
+        }
+
+        function showFinalResponse() {
+            document.getElementById("final-response").classList.remove("hidden");
             document.getElementById("final-action").classList.remove("hidden");
         }
 
         function printPage() {
-            let printableContent = "<h1>Résumé du questionnaire</h1>";
-            questions.forEach((q, i) => {
-                printableContent += `<p><strong>${q}</strong> <br>Réponse: ${answers[i] ? "Oui" : "Non"}</p>`;
-            });
-            printableContent += `<h2>${document.getElementById("final-text").innerHTML}</h2>`;
-
-            let newWin = window.open("", "_blank");
-            newWin.document.write(printableContent);
-            newWin.document.close();
-            setTimeout(() => {
-                newWin.print();
-                newWin.close();
-            }, 1000);
+            window.print();
         }
     </script>
 
