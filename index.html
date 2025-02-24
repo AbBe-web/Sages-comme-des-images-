@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sages comme des images 😇</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <h1>Sages comme des images 😇</h1>
+        <h2>Y’a pas de loup, c’est juste de la pédagogie positive 😉 pour encourager de jeunes padawans qui donnent tellement pour devenir meilleurs 😅</h2>
+        <p>Merci de répondre honnêtement à ces quelques questions sur le comportement de Lucas/Amaury depuis le début de la semaine 🙏</p>
+        
+        <div id="start">
+            <p>Êtes-vous prêt ?</p>
+            <button onclick="startQuestions()">Oui</button>
+            <button onclick="notReady()">Non</button>
+        </div>
+
+        <div id="not-ready" class="hidden">
+            <p>Vous avez raison de prendre votre temps. Il est précieux et il faut profiter de chaque instant. Quand vous serez prêt, cliquez sur :</p>
+            <button onclick="startQuestions()">Je suis prêt</button>
+        </div>
+
+        <div id="questionnaire" class="hidden"></div>
+
+        <div id="result" class="hidden">
+            <p id="result-text"></p>
+            <p>Êtes-vous d’accord avec cette proposition ?</p>
+            <button onclick="agree()">Oui</button>
+            <button onclick="disagree()">Non</button>
+        </div>
+
+        <div id="disagree-message" class="hidden">
+            <p>Je vous propose de contacter le parrain de la famille, Pierre, qui trouvera sûrement les fonds nécessaires (en sollicitant la solidarité familiale) pour vous payer une psychothérapie car être aussi peu positif est sûrement le signe que vous êtes en difficulté et cela nous cause une grande peine 🥰.</p>
+        </div>
+
+        <div id="agree-message" class="hidden">
+            <p>Vous êtes un très honorable membre de la Famille. Votre présence est une joie pour chacun 🥳😊🥰🥳</p>
+        </div>
+
+        <div id="final-action" class="hidden">
+            <button onclick="printPage()">Imprimer et/ou envoyer aux parents</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Amaury/Lucas a-t-il contribué sans faillir cette semaine à l’équilibre idyllique de sa famille ?",
+            "A-t-il spontanément et régulièrement proposé son aide dans la vie quotidienne : mettre la table, ranger sa chambre, étendre le linge, apporter le petit déjeuner au lit à ses parents, aller chercher les 🥐, …?",
+            "A-t-il toujours fait ses devoirs sans rechigner ?",
+            "A-t-il fait le maximum de ce qu’il pouvait faire pour avoir de bonnes notes à l’école ?",
+            "A-t-il été indulgent envers ses parents  (même si c’est exceptionnellement nécessaire) parce qu’être un parent parfait c’est impossible ?",
+            "A-t-il été aussi adorable avec sa sœur/ses frères qu’elle/ils mérite/nt ?",
+            "A-t-il eu une hygiène corporelle et dentaire irréprochable sans qu’il soit nécessaire de le menacer de privation de gâteau basque pendant 7 ans (… de malheur 😢) ?",
+            "A-t-il été bien actif c’est à dire au moins 1h par jour avec parfois des activités intenses ?",
+            "A-t-il fait régulièrement preuve de courage comme il en a coutume ?"
+        ];
+
+        let answers = [];
+        let currentQuestion = 0;
+
+        function startQuestions() {
+            document.getElementById("start").classList.add("hidden");
+            document.getElementById("not-ready").classList.add("hidden");
+            showQuestion();
+        }
+
+        function notReady() {
+            document.getElementById("start").classList.add("hidden");
+            document.getElementById("not-ready").classList.remove("hidden");
+        }
+
+        function showQuestion() {
+            if (currentQuestion < questions.length) {
+                let questionnaire = document.getElementById("questionnaire");
+                questionnaire.innerHTML = `<p>${questions[currentQuestion]}</p>
+                                           <button onclick="recordAnswer(true)">Oui</button>
+                                           <button onclick="recordAnswer(false)">Non</button>`;
+                questionnaire.classList.remove("hidden");
+            } else {
+                showResult();
+            }
+        }
+
+        function recordAnswer(answer) {
+            answers.push(answer);
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showResult() {
+            let resultText = document.getElementById("result-text");
+            if (answers.every(a => a)) {
+                resultText.innerHTML = "Encore une semaine où Amaury/Lucas a eu un comportement parfait... Il mérite un hôtel 5 étoiles ! 🎁🥳";
+            } else if (answers.some(a => a)) {
+                resultText.innerHTML = "Franchement, Lucas/Amaury a été proche de la perfection encore une fois cette semaine 😇 Il mérite un cadeau spécial ! 🎉";
+            } else {
+                resultText.innerHTML = "Franchement, c’est incompréhensible… Il faut le réconforter avec une boîte de cannelés ! 😢";
+            }
+
+            document.getElementById("questionnaire").classList.add("hidden");
+            document.getElementById("result").classList.remove("hidden");
+        }
+
+        function agree() {
+            document.getElementById("result").classList.add("hidden");
+            document.getElementById("agree-message").classList.remove("hidden");
+            document.getElementById("final-action").classList.remove("hidden");
+        }
+
+        function disagree() {
+            document.getElementById("result").classList.add("hidden");
+            document.getElementById("disagree-message").classList.remove("hidden");
+            document.getElementById("final-action").classList.remove("hidden");
+        }
+
+        function printPage() {
+            window.print();
+        }
+    </script>
+
+</body>
+</html>
