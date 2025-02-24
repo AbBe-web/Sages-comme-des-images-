@@ -152,25 +152,15 @@
             let allNo = answers.every(a => !a);
 
             if (allYes) {
-                resultText.innerHTML = "Encore une semaine parfaite ! Cela mérite un hôtel 5 étoiles ou tout autre cadeau 🎁 de son choix 😇🥰🥳🥰😇.";
+                resultText.innerHTML = "Encore une semaine parfaite ! Cela mérite une semaine tout frais payés dans un hôtel 5 étoiles avec 3 à 10 personnes de son choix ou tout autre cadeau 🎁 de son choix 😇🥰🥳🥰😇.";
             } else if (allNo) {
-                resultText.innerHTML = "Incompréhensible… Il doit bien y avoir une explication. Il mérite du réconfort : un animal de compagnie ou une boîte de cannelés La Toque Cuivrée ! 😢";
+                resultText.innerHTML = "C'est incompréhensible... C’est la première fois depuis qu’il est né ! Il mérite du réconfort : un animal de compagnie, une soirée cinéma ou une boîte de cannelés La Toque Cuivrée ! 😢";
             } else {
-                resultText.innerHTML = "Lucas/Amaury a été proche de la perfection ! Il mérite un petit geste : un ensemble de vêtements, une console ou un week-end avec ses amis/famille 😇👏.";
+                resultText.innerHTML = "Lucas/Amaury a été proche de la perfection ! Il mérite un ensemble de vêtements, une console ou un week-end avec ses amis/famille 😇👏.";
             }
 
             document.getElementById("result").classList.remove("hidden");
             document.getElementById("final-action").classList.remove("hidden");
-        }
-
-        function agree() {
-            document.getElementById("result").classList.add("hidden");
-            document.getElementById("agree-message").classList.remove("hidden");
-        }
-
-        function disagree() {
-            document.getElementById("result").classList.add("hidden");
-            document.getElementById("disagree-message").classList.remove("hidden");
         }
 
         function printPage() {
@@ -178,6 +168,7 @@
             questions.forEach((q, i) => {
                 printableContent += `<p><strong>${q}</strong> <br>Réponse: ${answers[i] ? "Oui" : "Non"}</p>`;
             });
+            printableContent += `<h2>${document.getElementById("result-text").innerHTML}</h2>`;
 
             let newWin = window.open("", "_blank");
             newWin.document.write("<html><head><title>Résumé</title></head><body>");
