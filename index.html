@@ -134,7 +134,6 @@
                                              <button onclick="recordAnswer(false, this)">Non</button>`;
                 questionnaire.appendChild(questionElement);
 
-                // Scroll vers la nouvelle question
                 questionElement.scrollIntoView({ behavior: "smooth", block: "center" });
             } else {
                 showResult();
@@ -149,15 +148,6 @@
         }
 
         function showResult() {
-            let resultText = document.getElementById("result-text");
-            if (answers.every(a => a.response === "Oui")) {
-                resultText.innerHTML = "Encore une semaine où Amaury/Lucas a eu un comportement parfait... Il mérite un hôtel 5 étoiles ! 🎁🥳";
-            } else if (answers.some(a => a.response === "Oui")) {
-                resultText.innerHTML = "Franchement, Lucas/Amaury a été proche de la perfection encore une fois cette semaine 😇 Il mérite un cadeau spécial ! 🎉";
-            } else {
-                resultText.innerHTML = "Franchement, c’est incompréhensible… Il faut le réconforter avec une boîte de cannelés ! 😢";
-            }
-
             document.getElementById("result").classList.remove("hidden");
             document.getElementById("final-action").classList.remove("hidden");
         }
@@ -177,10 +167,16 @@
             answers.forEach(a => {
                 printableContent += `<p><strong>${a.question}</strong> <br>Réponse: ${a.response}</p>`;
             });
-            let newWin = window.open("");
+
+            let newWin = window.open("", "", "width=800,height=600");
+            newWin.document.write("<html><head><title>Résumé</title></head><body>");
             newWin.document.write(printableContent);
+            newWin.document.write("</body></html>");
             newWin.document.close();
-            newWin.print();
+            setTimeout(() => {
+                newWin.print();
+                newWin.close();
+            }, 500);
         }
     </script>
 
